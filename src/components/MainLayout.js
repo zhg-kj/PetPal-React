@@ -9,11 +9,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const NavBar = () => {
+const NavBar = ({ user }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [user, setUser] = useState({first_name: "Kai", last_name: "Zhuang", email: "kai@kai.com"});
 
   const navigation = [
     { name: 'Home', to: '/' },
@@ -37,7 +35,7 @@ const NavBar = () => {
                       key={item.name}
                       to={item.to}
                       className={classNames(
-                        (location.pathname.includes(item.to) && item.to !== '/app') || (location.pathname === '/app' && location.pathname === item.to)
+                        (location.pathname == item.to)
                           ? 'border-slate-500 text-gray-900'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
                         'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
@@ -72,6 +70,44 @@ const NavBar = () => {
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {true ? (
                         <>
+                          {user.isSeeker ? (
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'flex w-full px-4 py-2 text-sm text-gray-700'
+                                  )}
+                                  onClick={() => {
+                                    navigate('/applications');
+                                  }}
+                                >
+                                  Applications 
+                                </button>
+                              )}
+                            </Menu.Item>
+                          ) : (
+                            <></>
+                          )}
+                          {!user.isSeeker ? (
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'flex w-full px-4 py-2 text-sm text-gray-700'
+                                  )}
+                                  onClick={() => {
+                                    navigate('/manage/pets');
+                                  }}
+                                >
+                                  Manage Pets 
+                                </button>
+                              )}
+                            </Menu.Item>
+                          ) : (
+                            <></>
+                          )}
                           <Menu.Item>
                             {({ active }) => (
                               <button
@@ -80,7 +116,7 @@ const NavBar = () => {
                                   'flex w-full px-4 py-2 text-sm text-gray-700'
                                 )}
                                 onClick={() => {
-                                  navigate('/app/profile');
+                                  navigate('/profile');
                                 }}
                               >
                                 Profile
@@ -203,12 +239,12 @@ const NavBar = () => {
   );
 }
 
-export const MainLayout = ({ children }) => {
+export const MainLayout = ({ children, user }) => {
   return (
     <div className="h-full">
       <div className="h-full">
         <Suspense>
-          <NavBar />
+          <NavBar user={user} />
         </Suspense>
         <main className="p-4 md:p-10 mx-auto max-w-7xl">
           {children}

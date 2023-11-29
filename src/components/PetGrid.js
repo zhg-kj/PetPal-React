@@ -21,37 +21,40 @@ const fakeData = [
 export const PetGrid = () => {
   return (
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
-        <div class="grid gap-4">
+        <div className="grid gap-4">
           {fakeData.map((pet, index) => {
             if (index % 3 === 0) {
               return (
                 <PetCard pet={pet} />
               );
             }
+            return <></>
           })}
         </div>
       </div>
       <div>
-        <div class="grid gap-4">
+        <div className="grid gap-4">
           {fakeData.map((pet, index) => {
             if (index % 3 === 1) {
               return (
                   <PetCard pet={pet} />
               );
             }
+            return <></>
           })}
         </div>
       </div>
       <div>
-        <div class="grid gap-4">
+        <div className="grid gap-4">
           {fakeData.map((pet, index) => {
             if (index % 3 === 2) {
               return (
                   <PetCard pet={pet} />
               );
             }
+            return <></>
           })}
         </div>
       </div>

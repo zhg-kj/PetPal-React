@@ -6,12 +6,12 @@ import { Search } from "../components/Search";
 import { Sort } from "../components/Sort";
 import { PetGrid } from "../components/PetGrid";
 
-export default function Home() {
+export default function Home({ user }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
 
   return (
-    <MainLayout>
+    <MainLayout user={user}>
       <Metric>Search for Pets</Metric>
       <Subtitle>Find your next best friend.</Subtitle>
       <div className="flex justify-between items-center mt-6 mb-6 gap-2">
