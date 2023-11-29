@@ -4,6 +4,7 @@ import { Metric, Subtitle } from "@tremor/react";
 import { MainLayout } from "../components/MainLayout";
 import { Search } from "../components/Search";
 import { Sort } from "../components/Sort";
+import { PetGrid } from "../components/PetGrid";
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,6 +18,7 @@ export default function Home() {
         <Search setSearchTerm={setSearchTerm} />
         <Sort setSortBy={setSortBy}/>
       </div>
+      <PetGrid />
     </MainLayout>
   );
 }
