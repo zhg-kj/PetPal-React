@@ -1,7 +1,7 @@
 import { Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, Badge, Button } from "@tremor/react"
 
 const pets = [
-  {name: "Fluffy", type: "Dog", age: "2", size: "Large", status: "Waitlisted"}
+  {id: 1, name: "Fluffy", type: "Dog", age: 3, size: "Medium", status: "Waitlisted"}
 ]
 
 const colors = {
