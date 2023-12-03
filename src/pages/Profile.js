@@ -2,16 +2,45 @@ import { useState } from "react";
 import { Title, Metric, Card, TextInput, Textarea, Subtitle, Divider, Button } from "@tremor/react";
 
 import { MainLayout } from "../components/MainLayout";
+import { updateUser } from "../api/account/updateUser";
 
-export default function ShelterProfile({ user }) {
-  const [name, setName] = useState('');
-  const [bio, setBio] = useState('');
-  const [email, setEmail] = useState('');
-  const [addressLine1, setAddressLine1] = useState('');
-  const [addressLine2, setAddressLine2] = useState('');
-  const [city, setCity] = useState('');
-  const [province, setProvince] = useState('');
-  const [postalCode, setPostalCode] = useState('');
+export default function Profile({ user }) {
+  const [name, setName] = useState(user.name);
+  const [bio, setBio] = useState(user.bio);
+  const [addressLine1, setAddressLine1] = useState(user.address_line_1);
+  const [addressLine2, setAddressLine2] = useState(user.address_line_2);
+  const [city, setCity] = useState(user.city);
+  const [province, setProvince] = useState(user.province);
+  const [postalCode, setPostalCode] = useState(user.postal_code);
+
+  const handleSave = async () => {
+    try {
+      const changes = {
+        name: name,
+        bio: bio,
+        address_line_1: addressLine1,
+        address_line_2: addressLine2,
+        city: city,
+        province: province,
+        postal_code: postalCode
+      }
+  
+      await updateUser(changes);
+      window.location.reload();
+    } catch {
+      console.log("Error updating shelter.")
+    }
+  }
+
+  const handleCancel = () => {
+    setName(user.name);
+    setBio(user.bio);
+    setAddressLine1(user.address_line_1);
+    setAddressLine2(user.address_line_2);
+    setCity(user.city);
+    setProvince(user.province);
+    setPostalCode(user.postal_code);
+  }
 
   return (
     <MainLayout user={user}>
@@ -26,12 +55,10 @@ export default function ShelterProfile({ user }) {
             <TextInput placeholder="First Name" type="text" className="mt-2 mb-3" value={name} onChange={(e) => setName(e.target.value)} />
             <Title>Bio</Title>
             <Textarea placeholder="Last Name" type="text" className="mt-2 mb-3" value={bio} onChange={(e) => setBio(e.target.value)} />
-            <Title>Email</Title>
-            <TextInput placeholder="Email" type="text" className="mt-2 mb-3" value={email} onChange={(e) => setEmail(e.target.value)}/>
             <Divider/>
             <div className="flex justify-end">
-              <Button className="ml-auto" variant="light" onClick={() => {}}>Cancel</Button>
-              <Button className="ml-6" onClick={() => {}}>Save</Button>
+              <Button className="ml-auto" variant="light" onClick={handleCancel}>Cancel</Button>
+              <Button className="ml-6" onClick={handleSave}>Save</Button>
             </div>
           </Card>
         </div>
@@ -56,8 +83,8 @@ export default function ShelterProfile({ user }) {
             <TextInput placeholder="Postal Code" type="text" className="mt-2 mb-3" value={postalCode} onChange={(e) => setPostalCode(e.target.value)}/>
             <Divider/>
             <div className="flex justify-end">
-              <Button className="ml-auto" variant="light" onClick={() => {}}>Cancel</Button>
-              <Button className="ml-6" onClick={() => {}}>Save</Button>
+              <Button className="ml-auto" variant="light" onClick={handleCancel}>Cancel</Button>
+              <Button className="ml-6" onClick={handleSave}>Save</Button>
             </div>
           </Card>
         </div>

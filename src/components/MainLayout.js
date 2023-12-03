@@ -1,4 +1,4 @@
-import { Fragment, Suspense, useState } from 'react';
+import { Fragment, Suspense } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
@@ -35,7 +35,7 @@ const NavBar = ({ user }) => {
                       key={item.name}
                       to={item.to}
                       className={classNames(
-                        (location.pathname == item.to)
+                        (location.pathname === item.to)
                           ? 'border-slate-500 text-gray-900'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
                         'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
@@ -68,28 +68,24 @@ const NavBar = ({ user }) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {true ? (
+                      {user ? (
                         <>
-                          {user.isSeeker ? (
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'flex w-full px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                  onClick={() => {
-                                    navigate('/applications');
-                                  }}
-                                >
-                                  Applications 
-                                </button>
-                              )}
-                            </Menu.Item>
-                          ) : (
-                            <></>
-                          )}
-                          {!user.isSeeker ? (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <button
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'flex w-full px-4 py-2 text-sm text-gray-700'
+                                )}
+                                onClick={() => {
+                                  navigate('/applications');
+                                }}
+                              >
+                                Applications 
+                              </button>
+                            )}
+                          </Menu.Item>
+                          {!user.is_seeker ? (
                             <Menu.Item>
                               {({ active }) => (
                                 <button
@@ -135,6 +131,7 @@ const NavBar = ({ user }) => {
                                   localStorage.removeItem('refresh_token');
 
                                   navigate('/auth/login');
+                                  window.location.reload();
                                 }}
                               >
                                 Sign out
@@ -205,16 +202,50 @@ const NavBar = ({ user }) => {
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium text-gray-800">
-                        {user.first_name} {user.last_name}
+                        {user.name}
                       </div>
                       <div className="text-sm font-medium text-gray-500">
-                        {user.email}
+                        {user.username}
                       </div>
                     </div>
                   </div>
                   <div className="mt-3 space-y-1">
                     <button
-                      onClick={() => {}}
+                      onClick={() => {
+                        navigate('/applications');
+                      }}
+                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    >
+                      Applications 
+                    </button>
+                    {!user.is_seeker ? (
+                      <button
+                        onClick={() => {
+                          navigate('/manage/pets');
+                        }}
+                        className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                      >
+                        Manage Pets 
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                    <button
+                      onClick={() => {
+                        navigate('/profile');
+                      }}
+                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    >
+                      Profile
+                    </button>
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem('access_token');
+                        localStorage.removeItem('refresh_token');
+
+                        navigate('/auth/login');
+                        window.location.reload();
+                      }}
                       className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                     >
                       Sign out
@@ -224,7 +255,7 @@ const NavBar = ({ user }) => {
               ) : (
                 <div className="mt-3 space-y-1">
                   <button
-                    onClick={() => {}}
+                    onClick={() => navigate('/auth/login')}
                     className="flex w-full px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                   >
                     Sign in

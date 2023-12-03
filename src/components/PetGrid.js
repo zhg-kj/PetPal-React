@@ -1,4 +1,7 @@
+import { useState, useEffect } from 'react';
+
 import { PetCard }from "./PetCard";
+import { listPet } from "../api/pet/listPet";
 
 const fakeData = [
   { id: 1, name: "Fluffy", type: "Dog", age: 3, size: "Medium", status: "Waitlisted", image: "https://cdn.discordapp.com/attachments/861479282915803137/1160390475488960662/IMG_8724.jpg?ex=65347cd8&is=652207d8&hm=c1e21b24fcf89c258d919a21f8c5829196bea02c643ff44e4b9d12c4c2e1cf62&" },
@@ -19,15 +22,29 @@ const fakeData = [
 ];
 
 export const PetGrid = () => {
+  const [pets, setPets] = useState([]);
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const pets = await listPet();
+        setPets(pets);
+      } catch {
+        console.log("Couldn't fetch pets.")
+      }
+    }
+
+    fetchPets();
+  }, [])
+
   return (
-    
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <div className="grid gap-4">
-          {fakeData.map((pet, index) => {
+          {pets.map((pet, index) => {
             if (index % 3 === 0) {
               return (
-                <PetCard pet={pet} />
+                <PetCard pet={pet} key={pet.id} />
               );
             }
             return <></>
@@ -36,10 +53,10 @@ export const PetGrid = () => {
       </div>
       <div>
         <div className="grid gap-4">
-          {fakeData.map((pet, index) => {
+          {pets.map((pet, index) => {
             if (index % 3 === 1) {
               return (
-                  <PetCard pet={pet} />
+                <PetCard pet={pet} key={pet.id} />
               );
             }
             return <></>
@@ -48,10 +65,10 @@ export const PetGrid = () => {
       </div>
       <div>
         <div className="grid gap-4">
-          {fakeData.map((pet, index) => {
+          {pets.map((pet, index) => {
             if (index % 3 === 2) {
               return (
-                  <PetCard pet={pet} />
+                <PetCard pet={pet} key={pet.id} />
               );
             }
             return <></>

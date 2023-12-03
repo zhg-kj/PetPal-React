@@ -1,4 +1,5 @@
 import { Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, Badge, Button } from "@tremor/react"
+import { useNavigate } from "react-router-dom";
 
 const applications = [
   {name: "Fluffy", date: "Monday", status: "Pending"}
@@ -10,7 +11,9 @@ const colors = {
   "Accepted": "emerald",
 };
 
-export const ApplicationTable = ({ user }) => {
+export const ApplicationTable = () => {
+  const navigate = useNavigate();
+
   return (
     <Table>
       <TableHead>
@@ -32,8 +35,8 @@ export const ApplicationTable = ({ user }) => {
               </Badge>
             </TableCell>
             <TableCell>
-              <Button size="xs" variant="secondary">
-                See details
+              <Button size="xs" variant="secondary" onClick={() => navigate('/applications/manage', {state: {application: application}})}>
+                Manage
               </Button>
             </TableCell>
           </TableRow>

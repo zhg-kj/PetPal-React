@@ -1,8 +1,8 @@
 import { Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, Badge, Button } from "@tremor/react"
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const pets = [
-  {id: 1, name: "Fluffy", type: "Dog", age: 3, size: "Medium", status: "Waitlisted"}
-]
+import { listPet } from "../api/pet/listPet";
 
 const colors = {
   "Waitlisted": "orange",
@@ -11,6 +11,27 @@ const colors = {
 };
 
 export const PetTable = ({ user }) => {
+  const navigate = useNavigate();
+
+  const [pets, setPets] = useState([]);
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const pets = await listPet(user.id);
+        setPets(pets);
+      } catch {
+        console.log("Couldn't fetch pets.")
+      }
+    }
+
+    fetchPets();
+  }, [user.id])
+
+  const handleDelete = (pet) => {
+    
+  }
+
   return (
     <Table>
       <TableHead>
@@ -25,7 +46,7 @@ export const PetTable = ({ user }) => {
       </TableHead>
       <TableBody>
         {pets.map((pet) => (
-          <TableRow key={''}>
+          <TableRow key={pet.id}>
             <TableCell>{pet.name}</TableCell>
             <TableCell>{pet.type}</TableCell>
             <TableCell>{pet.age}</TableCell>
@@ -36,8 +57,11 @@ export const PetTable = ({ user }) => {
               </Badge>
             </TableCell>
             <TableCell>
-              <Button size="xs" variant="secondary">
-                See details
+              <Button size="xs" variant="secondary" onClick={() => navigate('/pet/update', {state: {pet: pet}})}>
+                Update
+              </Button>
+              <Button className='ml-2' size="xs" variant="secondary" color='rose' onClick={(pet) => handleDelete(pet)}>
+                Delete
               </Button>
             </TableCell>
           </TableRow>

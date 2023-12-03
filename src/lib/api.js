@@ -17,11 +17,11 @@ api.interceptors.request.use((config) => {
 
 const refreshAccessToken = async (refreshToken) => {
   try {
-    const response = await axios.post(process.env.REACT_APP_API_URL + '/account/login/refresh/', {
-      refresh: refreshToken,
+    const response = await axios.post(process.env.REACT_APP_API_URL + '/account/token/refresh/', {
+      refresh_token: refreshToken,
     });
 
-    const newAccessToken = response.data.data.access;
+    const newAccessToken = response.data.access;
     localStorage.setItem('access_token', newAccessToken);
 
     return newAccessToken;

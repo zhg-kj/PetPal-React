@@ -1,4 +1,4 @@
-import { Metric, Grid, Title, Button, Flex, Card, Subtitle, TabGroup, TabList, TableBody, TabPanels, Tab, TabPanel } from "@tremor/react";
+import { Metric, Grid, Title, Button, Flex, Card, Subtitle, TabGroup, TabList, TabPanels, Tab, TabPanel, Text } from "@tremor/react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { MainLayout } from "../components/MainLayout";
@@ -30,8 +30,8 @@ export default function PetDetails({ user }) {
           <Title className='mt-3'>I'm an explorer at heart, loving the feel of grass beneath my paws and the wind in my fur. I adore belly rubs, ear scratches, and playtime with squeaky toys. But what I cherish most is companionship—a loving friend to share my days with.</Title>
           <Title className='mt-3'>As I wait for a forever family, my eyes brim with hope, longing for that special connection to mend my heart. I may have started as a stray, but now, I'm a dog eager to find my home and fill it with love.</Title>
           <Flex justifyContent='end' alignItems='center' className='mt-6 gap-6'>
-            <Button variant='light' onClick={() => navigate('/shelter', {state: {shelterId: 1}})}>View Shelter</Button>
-            <Button variant='primary'>Adopt</Button>
+            <Button variant='light' onClick={() => navigate('/shelter', {state: {shelterId: location.state.pet.shelter}})}>View Shelter</Button>
+            <Button variant='primary' onClick={() => navigate('/adopt', {state: {pet: location.state.pet}})}>Adopt</Button>
           </Flex>
           <Card className='mt-6 flex flex-col' decoration='top' decorationColor={states[location.state.pet.status].color}>
             <div>
@@ -41,7 +41,7 @@ export default function PetDetails({ user }) {
           </Card>
         </div>
         <div className='flex flex-col justify-center'>
-          <ImageCarousel images={images} />
+          <ImageCarousel images={[location.state.pet.image1, location.state.pet.image2]} />
         </div>
       </Grid>
       <Metric className='mt-6'>Details</Metric>
@@ -53,13 +53,13 @@ export default function PetDetails({ user }) {
         </TabList>
         <TabPanels>
           <TabPanel>
-
+            <Text>{location.state.pet.medical_history}</Text>
           </TabPanel>
           <TabPanel>
-            
+            <Text>{location.state.pet.behavior}</Text>
           </TabPanel>
           <TabPanel>
-            
+            <Text>{location.state.pet.needs}</Text>
           </TabPanel>
         </TabPanels>
       </TabGroup>

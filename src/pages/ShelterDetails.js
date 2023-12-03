@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Metric, Grid, Title, Card, Subtitle } from "@tremor/react";
+import { Metric, Grid, Title } from "@tremor/react";
 import { useLocation } from "react-router-dom";
 
 import { MainLayout } from "../components/MainLayout";
 import { ImageCarousel } from "../components/ImageCarousel";
-import { getShelter } from "../api/getShelter";
+import { getUser } from "../api/account/getUser";
 
 const images = [
   "https://cdn.discordapp.com/attachments/861479282915803137/1161299225800364053/IMG_8754.jpg?ex=6537cb2f&is=6525562f&hm=31ead8c09165b30f6aa786ae73dc7720fd68d7f6e650fd90ceef35d48ee13584&",
@@ -20,7 +20,7 @@ export default function ShelterDetails({ user }) {
   useEffect(() => {
     const fetchShelter = async () => {
       try {
-        const shelter = await getShelter(location.state.shelterId);
+        const shelter = await getUser(location.state.shelterId);
         setShelter(shelter)
       } catch {
         console.log("Couldn't get shelter details");
@@ -28,7 +28,7 @@ export default function ShelterDetails({ user }) {
     }
 
     fetchShelter();
-  }, location.state.shelterId)
+  }, [location.state.shelterId])
 
   return (
     <MainLayout user={user}>
@@ -39,6 +39,7 @@ export default function ShelterDetails({ user }) {
         <div className='flex flex-col justify-center'>
           <Metric>We are</Metric>
           <Metric>{shelter.name}</Metric>
+          <Title className='mt-6'>{shelter.bio}</Title>
         </div>
       </Grid>
       <Metric className='mt-6'>Reviews</Metric>

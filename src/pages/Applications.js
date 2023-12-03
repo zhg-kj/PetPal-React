@@ -8,7 +8,7 @@ export default function Applications({ user }) {
   return (
     <MainLayout user={user}>
       <Metric>Applications</Metric>
-      <Subtitle>View your pet application history.</Subtitle>
+      <Subtitle>View and manage your {user.is_seeker ? '' : "shelter's"} applications.</Subtitle>
       <Card className='mt-6'>
         <ApplicationTable user={user} />
       </Card>

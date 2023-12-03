@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { Metric, TextInput, Card, Title, Button, Flex } from "@tremor/react";
+import { useNavigate } from "react-router-dom";
 
 import { MainLayout } from "../components/MainLayout";
+import { login } from "../api/account/login";
 
 export default function Login({ user }) {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
     try {
-
+      await login(username, password);
+      navigate('/');
+      window.location.reload();
     } catch {
-      
+      console.log('Failed to login.');
     }
   }
 
@@ -24,7 +30,10 @@ export default function Login({ user }) {
           <TextInput className='mt-2' onChange={(e) => setUsername(e.target.value)} />
           <Title className='mt-2'>Password</Title>
           <TextInput className='mt-2' onChange={(e) => setPassword(e.target.value)} />
-          <Button className='mt-6' onClick={handleLogin}>Login</Button>
+          <Flex className='mt-6' justifyContent='end' alignItems='center'>
+            <Button onClick={() => navigate('/auth/register')} variant='light'>Register</Button>
+            <Button className='ml-4' onClick={handleLogin}>Login</Button>
+          </Flex>
         </Card>
       </Flex>
     </MainLayout>
