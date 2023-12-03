@@ -1,18 +1,32 @@
 import { useState } from "react";
 import { Card, Divider, Flex, Metric, Subtitle, Textarea, Title, Button } from "@tremor/react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { MainLayout } from "../components/MainLayout";
+import { createApplication } from "../api/application/createApplication";
 
 export default function Adopt({ user }) {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [a1, setA1] = useState('');
   const [a2, setA2] = useState('');
   const [a3, setA3] = useState('');
 
-  const handleSubmit = () => {
-    
+  const handleSubmit = async () => {
+    try {
+      const application = {
+        pet: location.state.pet.id,
+        answer_1: a1,
+        answer_2: a2,
+        answer_3: a3
+      }
+
+      await createApplication(application);
+      navigate(-1);
+    } catch {
+      console.log("Couldn't submit application.");
+    }
   }
 
   return (

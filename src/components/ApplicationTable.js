@@ -1,9 +1,8 @@
+import { useEffect, useState } from "react";
 import { Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, Badge, Button } from "@tremor/react"
 import { useNavigate } from "react-router-dom";
 
-const applications = [
-  {name: "Fluffy", date: "Monday", status: "Pending"}
-]
+import { listApplication } from "../api/application/listApplication";
 
 const colors = {
   "Pending": "orange",
@@ -11,14 +10,30 @@ const colors = {
   "Accepted": "emerald",
 };
 
-export const ApplicationTable = () => {
+export const ApplicationTable = ({ user }) => {
   const navigate = useNavigate();
+
+  const [applications, setApplications] = useState([]);
+
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const applications = await listApplication();
+        setApplications(applications);
+      } catch {
+        console.log("Couldn't fetch pets.")
+      }
+    }
+
+    fetchApplications();
+  }, [])
 
   return (
     <Table>
       <TableHead>
         <TableRow>
-          <TableHeaderCell>Name</TableHeaderCell>
+          <TableHeaderCell>{user.is_seeker ? 'Shelter' : 'Seeker'}</TableHeaderCell>
+          <TableHeaderCell>Pet</TableHeaderCell>
           <TableHeaderCell>Date</TableHeaderCell>
           <TableHeaderCell>Status</TableHeaderCell>
           <TableHeaderCell>Actions</TableHeaderCell>
@@ -26,9 +41,10 @@ export const ApplicationTable = () => {
       </TableHead>
       <TableBody>
         {applications.map((application) => (
-          <TableRow key={''}>
-            <TableCell>{application.name}</TableCell>
-            <TableCell>{application.date}</TableCell>
+          <TableRow key={application.id}>
+            <TableCell>{user.is_seeker ? application.shelter_name : application.seeker_name}</TableCell>
+            <TableCell>{application.pet_name}</TableCell>
+            <TableCell>{application.created_at}</TableCell>
             <TableCell>
               <Badge color={colors[application.status]} size="xs">
                 {application.status}

@@ -4,7 +4,6 @@ import { MainLayout } from "../components/MainLayout";
 import { ApplicationTable } from "../components/ApplicationTable";
 
 export default function Applications({ user }) {
-
   return (
     <MainLayout user={user}>
       <Metric>Applications</Metric>
