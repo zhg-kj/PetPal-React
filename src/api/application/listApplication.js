@@ -1,8 +1,10 @@
 import api from "../../lib/api";
 
-export const listApplication = async () => {
+export const listApplication = async (applicationId = null) => {
   try {
-    const response = await api.get('/application/list/');
+    const params = applicationId ? { application_id: applicationId } : {};
+
+    const response = await api.get('/application/list/', { params });
 
     if (response.status === 401) {
       alert("Unauthorized");

@@ -3,15 +3,16 @@ import { Card, Title, Text, TextInput, Flex, Button } from "@tremor/react";
 
 import { listMessage } from "../api/application/listMessage";
 import { createMessage } from "../api/application/createMessage";
+import { createNotification } from "../api/notification/createNotification";
 
-export default function Chat({ applicationId, user }) {
+export default function Chat({ application, user }) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const fetchMessage = async () => {
       try {
-        const messages = await listMessage(applicationId);
+        const messages = await listMessage(application.id);
         
         messages.sort((a, b) => {
           const timeA = new Date(a.time);
@@ -27,16 +28,24 @@ export default function Chat({ applicationId, user }) {
     }
 
     fetchMessage();
-  }, [])
+  }, [application])
 
   const handleSend = async () => {
     try {
       const newMessage = {
-        application: applicationId,
+        application: application.id,
         message: message
       }
 
+      const newNotification = {
+        user: user.is_seeker ? application.shelter : application.seeker,
+        message: `New message in application for ${application.pet_name}.`,
+        model_type: "Application",
+        model_id: application.id
+      }
+
       await createMessage(newMessage);
+      await createNotification(newNotification);
       window.location.reload();
     } catch {
       console.log("Unable to send message.");

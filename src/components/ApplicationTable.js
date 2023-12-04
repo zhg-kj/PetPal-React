@@ -34,29 +34,39 @@ export const ApplicationTable = ({ user }) => {
         <TableRow>
           <TableHeaderCell>{user.is_seeker ? 'Shelter' : 'Seeker'}</TableHeaderCell>
           <TableHeaderCell>Pet</TableHeaderCell>
-          <TableHeaderCell>Date</TableHeaderCell>
+          <TableHeaderCell>Created At</TableHeaderCell>
+          <TableHeaderCell>Updated At</TableHeaderCell>
           <TableHeaderCell>Status</TableHeaderCell>
           <TableHeaderCell>Actions</TableHeaderCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {applications.map((application) => (
-          <TableRow key={application.id}>
-            <TableCell>{user.is_seeker ? application.shelter_name : application.seeker_name}</TableCell>
-            <TableCell>{application.pet_name}</TableCell>
-            <TableCell>{application.created_at}</TableCell>
-            <TableCell>
-              <Badge color={colors[application.status]} size="xs">
-                {application.status}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              <Button size="xs" variant="secondary" onClick={() => navigate('/applications/manage', {state: {application: application}})}>
-                Manage
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+        {applications.map((application) => {
+          const created = new Date(application.created_at);
+          const formattedCreated = created.toDateString();
+
+          const updated = new Date(application.updated_at);
+          const formattedUpdated = updated.toDateString();
+
+          return (
+            <TableRow key={application.id}>
+              <TableCell>{user.is_seeker ? application.shelter_name : application.seeker_name}</TableCell>
+              <TableCell>{application.pet_name}</TableCell>
+              <TableCell>{formattedCreated}</TableCell>
+              <TableCell>{formattedUpdated}</TableCell>
+              <TableCell>
+                <Badge color={colors[application.status]} size="xs">
+                  {application.status}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Button size="xs" variant="secondary" onClick={() => navigate('/applications/manage', {state: {applicationId: application.id}})}>
+                  Manage
+                </Button>
+              </TableCell>
+            </TableRow>
+          )
+        })}
       </TableBody>
     </Table>
   )
