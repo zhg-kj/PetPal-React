@@ -4,6 +4,7 @@ import { Card, Title, Text, TextInput, Flex, Button } from "@tremor/react";
 import { listMessage } from "../api/application/listMessage";
 import { createMessage } from "../api/application/createMessage";
 import { createNotification } from "../api/notification/createNotification";
+import toast from "react-hot-toast";
 
 export default function Chat({ application, user }) {
   const [message, setMessage] = useState('');
@@ -32,6 +33,11 @@ export default function Chat({ application, user }) {
 
   const handleSend = async () => {
     try {
+      if (!message) {
+        toast.error("Message cannot be blank");
+        return
+      }
+
       const newMessage = {
         application: application.id,
         message: message
@@ -48,7 +54,7 @@ export default function Chat({ application, user }) {
       await createNotification(newNotification);
       window.location.reload();
     } catch {
-      console.log("Unable to send message.");
+      toast.error("Failed to send message")
     }
   }
 

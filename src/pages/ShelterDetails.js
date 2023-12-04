@@ -10,6 +10,7 @@ import { createReview } from "../api/review/createReview";
 import { createNotification } from "../api/notification/createNotification";
 import { listPost } from "../api/blog/listPost";
 import { Post } from "../components/Post";
+import toast from "react-hot-toast";
 
 const images = [
   "https://cdn.discordapp.com/attachments/861479282915803137/1161312110668697671/IMG_8758.jpg?ex=6537d72f&is=6525622f&hm=c0af13dd925c558fff9b24f2a7b351935fd67a53a591f56538aa1ac376c3798c&",
@@ -60,6 +61,11 @@ export default function ShelterDetails({ user }) {
 
   const handlePost = async () => {
     try {
+      if (!message) {
+        toast.error("Message cannot be empty");
+        return
+      }
+
       const review = {
         shelter: location.state.shelterId,
         message: message,
@@ -77,7 +83,7 @@ export default function ShelterDetails({ user }) {
       await createNotification(newNotification)
       window.location.reload();
     } catch {
-      console.log("Couldn't post review");
+      toast.error("Failed to post review");
     }
   }
 
@@ -119,7 +125,7 @@ export default function ShelterDetails({ user }) {
             {reviews.map((review) => {
               return (
                 <Card className='mt-4' key={review.id}>
-                  <Title>{review.reviewer_name}</Title>
+                  <Title>{review.reviewer_name} - {review.rating}/5</Title>
                   <Text className='mt-2'>{review.message}</Text>
                 </Card>
               )

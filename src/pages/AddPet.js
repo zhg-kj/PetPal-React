@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { MainLayout } from "../components/MainLayout";
 import { createPet } from "../api/pet/createPet";
+import toast from "react-hot-toast";
 
 export default function AddPet({ user }) {
   const navigate = useNavigate();
@@ -21,6 +22,14 @@ export default function AddPet({ user }) {
 
   const handleSubmit = async () => {
     try {
+      if (!name || !type || !size || age === null || age === undefined || !description || !medical || !behavior || !needs || !image1 || !image2) {
+        toast.error("Please fill in all fields");
+        return;
+      } else if (!Number.isInteger(age)) {
+        toast.error("Age must be an integer");
+        return;
+      }
+
       const pet = {
         name: name,
         type: type,
@@ -38,8 +47,16 @@ export default function AddPet({ user }) {
       await createPet(pet);
       navigate('/manage/pets');
       window.location.reload();
-    } catch {
-      console.log("Couldn't create pet.")
+    } catch (error) {
+      if (error.response.data.image1) {
+        toast.error("Failed to create pet: Image 1 is not a valid URL");
+        return
+      } else if (error.response.data.image2) {
+        toast.error("Failed to create pet: Image 2 is not a valid URL");
+        return
+      }
+
+      toast.error("Failed to create pet");
     }
   }
 
@@ -71,10 +88,10 @@ export default function AddPet({ user }) {
         <Textarea className='mt-2' onChange={(e) => setBehavior(e.target.value)}/>
         <Title className='mt-2'>Special Needs</Title>
         <Textarea className='mt-2' onChange={(e) => setNeeds(e.target.value)}/>
-        <Title>Image 1</Title>
-        <TextInput className='mt-2' onChange={(e) => setImage1(e.target.value)} />
-        <Title>Image 2</Title>
-        <TextInput className='mt-2' onChange={(e) => setImage2(e.target.value)} />
+        <Title className='mt-2'>Image 1</Title>
+        <TextInput className='mt-2' onChange={(e) => setImage1(e.target.value)} type='url'/>
+        <Title className='mt-2'>Image 2</Title>
+        <TextInput className='mt-2' onChange={(e) => setImage2(e.target.value)} type='url'/>
         <Divider />
         <Flex justifyContent='end' alignItems='center'>
           <Button onClick={handleSubmit}>Submit</Button>

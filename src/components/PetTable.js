@@ -28,10 +28,6 @@ export const PetTable = ({ user }) => {
     fetchPets();
   }, [user.id])
 
-  const handleDelete = (pet) => {
-    
-  }
-
   return (
     <Table>
       <TableHead>
@@ -59,9 +55,6 @@ export const PetTable = ({ user }) => {
             <TableCell>
               <Button size="xs" variant="secondary" onClick={() => navigate('/pet/update', {state: {pet: pet}})}>
                 Update
-              </Button>
-              <Button className='ml-2' size="xs" variant="secondary" color='rose' onClick={(pet) => handleDelete(pet)}>
-                Delete
               </Button>
             </TableCell>
           </TableRow>

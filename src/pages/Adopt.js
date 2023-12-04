@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { MainLayout } from "../components/MainLayout";
 import { createApplication } from "../api/application/createApplication";
+import toast from "react-hot-toast";
 
 export default function Adopt({ user }) {
   const location = useLocation();
@@ -15,6 +16,11 @@ export default function Adopt({ user }) {
 
   const handleSubmit = async () => {
     try {
+      if (!a1 || !a2 || !a3) {
+        toast.error("Please answer all questions");
+        return
+      }
+
       const application = {
         pet: location.state.pet.id,
         answer_1: a1,
@@ -25,7 +31,7 @@ export default function Adopt({ user }) {
       await createApplication(application);
       navigate(-1);
     } catch {
-      console.log("Couldn't submit application.");
+      toast.error("Unable to create application");
     }
   }
 

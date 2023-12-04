@@ -5,6 +5,7 @@ import { MainLayout } from "../components/MainLayout";
 import { listPost } from "../api/blog/listPost";
 import { createPost } from "../api/blog/createPost";
 import { Post } from "../components/Post";
+import toast from "react-hot-toast";
 
 export default function Blog({ user, shelterId, shelterName }) {
   const [posts, setPosts] = useState([]);
@@ -24,7 +25,7 @@ export default function Blog({ user, shelterId, shelterName }) {
 
         setPosts(posts)
       } catch {
-        console.log("Unable to get posts")
+        toast.error("Failed to get posts");
       }
     }
 
@@ -33,10 +34,15 @@ export default function Blog({ user, shelterId, shelterName }) {
 
   const handlePost = async () => {
     try {
+      if (!message) {
+        toast.error("Post cannot be blank");
+        return
+      }
+
       await createPost(message);
       window.location.reload();
     } catch {
-      console.log("Unable to create post");
+      toast.error("Failed to create post");
     }
   }
 

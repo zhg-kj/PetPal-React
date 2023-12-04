@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { MainLayout } from "../components/MainLayout";
 import { updatePet } from "../api/pet/updatePet";
+import toast from "react-hot-toast";
 
 export default function UpdatePet({ user }) {
   const location = useLocation();
@@ -23,6 +24,14 @@ export default function UpdatePet({ user }) {
 
   const handleSubmit = async () => {
     try {
+      if (!name || !type || !size || age === null || age === undefined || !description || !medical || !behavior || !needs || !image1 || !image2) {
+        toast.error("Please fill in all fields");
+        return;
+      } else if (!Number.isInteger(age)) {
+        toast.error("Age must be an integer");
+        return;
+      }
+
       const pet = {
         name: name,
         type: type,
@@ -40,8 +49,16 @@ export default function UpdatePet({ user }) {
       await updatePet(location.state.pet.id, pet);
       navigate('/manage/pets');
       window.location.reload();
-    } catch {
-      console.log("Couldn't create pet.")
+    } catch (error) {
+      if (error.response.data.image1) {
+        toast.error("Failed to update pet: Image 1 is not a valid URL");
+        return
+      } else if (error.response.data.image2) {
+        toast.error("Failed to update pet: Image 2 is not a valid URL");
+        return
+      }
+
+      toast.error("Failed to update pet");
     }
   }
 
@@ -79,9 +96,9 @@ export default function UpdatePet({ user }) {
         <Textarea className='mt-2' onChange={(e) => setBehavior(e.target.value)} value={behavior} />
         <Title className='mt-2'>Special Needs</Title>
         <Textarea className='mt-2' onChange={(e) => setNeeds(e.target.value)} value={needs} />
-        <Title>Image 1</Title>
+        <Title className='mt-2'>Image 1</Title>
         <TextInput className='mt-2' onChange={(e) => setImage1(e.target.value)} value={image1} />
-        <Title>Image 2</Title>
+        <Title className='mt-2'>Image 2</Title>
         <TextInput className='mt-2' onChange={(e) => setImage2(e.target.value)} value={image2} />
         <Divider />
         <Flex justifyContent='end' alignItems='center'>

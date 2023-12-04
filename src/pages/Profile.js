@@ -3,6 +3,7 @@ import { Title, Metric, Card, TextInput, Textarea, Subtitle, Divider, Button } f
 
 import { MainLayout } from "../components/MainLayout";
 import { updateUser } from "../api/account/updateUser";
+import toast from "react-hot-toast";
 
 export default function Profile({ user }) {
   const [name, setName] = useState(user.name);
@@ -15,6 +16,11 @@ export default function Profile({ user }) {
 
   const handleSave = async () => {
     try {
+      if (!name) {
+        toast.error("Name cannot be blank");
+        return
+      }
+
       const changes = {
         name: name,
         bio: bio,
@@ -28,7 +34,7 @@ export default function Profile({ user }) {
       await updateUser(changes);
       window.location.reload();
     } catch {
-      console.log("Error updating shelter.")
+      toast.error("Failed to update profile");
     }
   }
 

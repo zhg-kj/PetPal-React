@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Metric, TextInput, Card, Title, Button, Flex, Select, SelectItem } from "@tremor/react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { MainLayout } from "../components/MainLayout";
 import { register } from "../api/account/register";
@@ -10,11 +11,20 @@ export default function Register({ user }) {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
   const [name, setName] = useState('');
   const [type, setType] = useState('');
 
   const handleRegister = async () => {
     try {
+      if (password !== passwordCheck) {
+        toast.error("Passwords do not match");
+        return
+      } else if (!username || !password || !name || !type) {
+        toast.error("Please fill in all fields");
+        return
+      }
+
       const newUser = {
         username,
         password,
@@ -24,8 +34,13 @@ export default function Register({ user }) {
 
       await register(newUser);
       navigate('/auth/login');
-    } catch {
-      console.log('Failed to register.');
+    } catch (error) {
+      if (error.response.data.username) {
+        toast.error("Failed to register: Username is taken")
+        return
+      }
+
+      toast.error("Failed to register");
     }
   }
 
@@ -37,7 +52,8 @@ export default function Register({ user }) {
           <Title className='mt-4'>Username</Title>
           <TextInput className='mt-2' onChange={(e) => setUsername(e.target.value)} />
           <Title className='mt-2'>Password</Title>
-          <TextInput className='mt-2' onChange={(e) => setPassword(e.target.value)} />
+          <TextInput className='mt-2' type='password' onChange={(e) => setPassword(e.target.value)} />
+          <TextInput className='mt-2' type='password' onChange={(e) => setPasswordCheck(e.target.value)} />
           <Title className='mt-2'>Name</Title>
           <TextInput className='mt-2' onChange={(e) => setName(e.target.value)} />
           <Title className='mt-2'>Type</Title>

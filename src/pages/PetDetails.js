@@ -25,7 +25,7 @@ export default function PetDetails({ user }) {
           <Title className='mt-3'>As I wait for a forever family, my eyes brim with hope, longing for that special connection to mend my heart. I may have started as a stray, but now, I'm a dog eager to find my home and fill it with love.</Title>
           <Flex justifyContent='end' alignItems='center' className='mt-6 gap-6'>
             <Button variant='light' onClick={() => navigate('/shelter', {state: {shelterId: location.state.pet.shelter}})}>View Shelter</Button>
-            <Button variant='primary' onClick={() => navigate('/adopt', {state: {pet: location.state.pet}})} disabled={user === undefined}>Adopt</Button>
+            <Button variant='primary' onClick={() => navigate('/adopt', {state: {pet: location.state.pet}})} disabled={user === undefined || location.state.pet.status !== 'Available'}>Adopt</Button>
           </Flex>
           <Card className='mt-6 flex flex-col' decoration='top' decorationColor={states[location.state.pet.status].color}>
             <div>

@@ -6,6 +6,7 @@ import { createComment } from "../api/blog/createComment";
 import { checkLike } from "../api/blog/checkLike";
 import { like } from "../api/blog/like";
 import { unlike } from "../api/blog/unlike";
+import toast from "react-hot-toast";
 
 export const Post = ({ user, post }) => {
   const [message, setMessage] = useState('');
@@ -28,10 +29,16 @@ export const Post = ({ user, post }) => {
 
   const handleComment = async () => {
     try {
+      if (!message) {
+        toast.error("Comment cannot be empty");
+        return
+      }
+
       await createComment(post.id, message)
+
       window.location.reload();
     } catch {
-      console.log("Unable to create comment");
+      console.log("Failed to comment");
     }
   }
 
