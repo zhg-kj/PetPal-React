@@ -10,7 +10,7 @@ const colors = {
   "Accepted": "emerald",
 };
 
-export const ApplicationTable = ({ user }) => {
+export const ApplicationTable = ({ user, sortBy, filters, searchTerm }) => {
   const navigate = useNavigate();
 
   const [applications, setApplications] = useState([]);
@@ -19,14 +19,31 @@ export const ApplicationTable = ({ user }) => {
     const fetchApplications = async () => {
       try {
         const applications = await listApplication();
-        setApplications(applications);
+
+        let filteredApplications = applications.filter(application => {
+          const matchesSearch = application.pet_name.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesFilters = filters.length === 0 || filters.includes(application.status);
+          return matchesSearch && matchesFilters;
+        });
+
+        if (sortBy === 'Newest') {
+          filteredApplications.sort((a, b) => {
+            return new Date(b.created_at) - new Date(a.created_at);
+          });
+        } else if (sortBy === 'Updated Recently') {
+          filteredApplications.sort((a, b) => {
+            return new Date(b.updated_at) - new Date(a.updated_at);
+          });
+        }
+
+        setApplications(filteredApplications);
       } catch {
-        console.log("Couldn't fetch pets.")
+        console.log("Couldn't fetch applications.")
       }
     }
 
     fetchApplications();
-  }, [])
+  }, [searchTerm, sortBy, filters])
 
   return (
     <Table>

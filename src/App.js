@@ -17,6 +17,7 @@ import Profile from './pages/Profile';
 import Notifications from './pages/Notifications';
 import Blog from './pages/Blog';
 import { Toaster } from 'react-hot-toast';
+import { NotFound } from './pages/NotFound';
 
 function App() {
   const [user, setUser] = useState()
@@ -43,6 +44,7 @@ function App() {
           <Route path="/" element={!user || user.is_seeker ? <Home user={user} /> : <Blog user={user} shelterId={user.id} shelterName={user.name}/>} />
           <Route path="/auth/login" element={<Login user={user} />} />
           <Route path="/auth/register" element={<Register user={user} />} />
+          <Route path="*" element={<NotFound user={user} />} />
           {!user || user.is_seeker ? (
             <>
               <Route path="/details" element={<PetDetails user={user} />} />

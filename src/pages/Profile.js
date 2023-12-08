@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Title, Metric, Card, TextInput, Textarea, Subtitle, Divider, Button } from "@tremor/react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { MainLayout } from "../components/MainLayout";
 import { updateUser } from "../api/account/updateUser";
-import toast from "react-hot-toast";
+import { deleteUser } from "../api/account/deleteUser";
 
 export default function Profile({ user }) {
+  const navigate = useNavigate();
+
   const [name, setName] = useState(user.name);
   const [bio, setBio] = useState(user.bio);
   const [addressLine1, setAddressLine1] = useState(user.address_line_1);
@@ -35,6 +39,18 @@ export default function Profile({ user }) {
       window.location.reload();
     } catch {
       toast.error("Failed to update profile");
+    }
+  }
+
+  const handleDelete = async () => {
+    try {
+      await deleteUser();
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+
+      navigate('/auth/login');
+    } catch {
+      toast.error("Failed to delete user");
     }
   }
 
@@ -94,6 +110,9 @@ export default function Profile({ user }) {
             </div>
           </Card>
         </div>
+      </div>
+      <div className="flex justify-end mt-6">
+        <Button onClick={handleDelete} color='rose'>Delete User</Button>
       </div>
     </MainLayout>
   );

@@ -23,7 +23,7 @@ export const Search = ({ setSearchTerm, disabled }) => {
           name="search"
           id="search"
           disabled={disabled}
-          placeholder="Search by name..."
+          placeholder="Search by pet name..."
           spellCheck={false}
           onChange={(e) => handleSearch(e.target.value)}
         />
