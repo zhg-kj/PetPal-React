@@ -20,9 +20,8 @@ export default function PetDetails({ user }) {
         <div className='flex flex-col justify-center'>
           <Metric>Hi I'm</Metric>
           <Metric>{location.state.pet.name}</Metric>
-          <Title className='mt-6'>Once, I roamed the streets alone, a forgotten soul in search of warmth and love. Then, a kind hand reached out, leading me to a place called a "shelter." They called me Charlie.</Title>
-          <Title className='mt-3'>I'm an explorer at heart, loving the feel of grass beneath my paws and the wind in my fur. I adore belly rubs, ear scratches, and playtime with squeaky toys. But what I cherish most is companionship—a loving friend to share my days with.</Title>
-          <Title className='mt-3'>As I wait for a forever family, my eyes brim with hope, longing for that special connection to mend my heart. I may have started as a stray, but now, I'm a dog eager to find my home and fill it with love.</Title>
+          <Title className='mt-6'>Once, I roamed the streets alone, a forgotten soul in search of warmth and love. Then, a kind hand reached out, leading me to a place called a "shelter."</Title>
+          <Title className='mt-3'>{location.state.pet.description}</Title>
           <Flex justifyContent='end' alignItems='center' className='mt-6 gap-6'>
             <Button variant='light' onClick={() => navigate('/shelter', {state: {shelterId: location.state.pet.shelter}})}>View Shelter</Button>
             <Button variant='primary' onClick={() => navigate('/adopt', {state: {pet: location.state.pet}})} disabled={user === undefined || location.state.pet.status !== 'Available'}>Adopt</Button>

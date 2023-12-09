@@ -13,7 +13,7 @@ export const PetGrid = ({ searchTerm, sortBy, filters }) => {
 
         let filteredPets = pets.filter(pet => {
           const matchesSearch = pet.name.toLowerCase().includes(searchTerm.toLowerCase());
-          const matchesFilters = filters.length === 0 || filters.includes(pet.type);
+          const matchesFilters = filters.length === 0 || (filters.includes(pet.type) || filters.includes(pet.size));
           return matchesSearch && matchesFilters;
         });
 

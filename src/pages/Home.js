@@ -23,6 +23,15 @@ const types = [
   },
   {
     title: 'Cat'
+  },
+  {
+    title: 'Small'
+  },
+  {
+    title: 'Medium'
+  },
+  {
+    title: 'Large'
   }
 ]
 
